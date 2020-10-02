@@ -3,67 +3,33 @@ import "../../styles/home.scss";
 //import { Context } from "../store/appContext";
 import { CharacterCard } from "../component/characterCard";
 import { PlanetCard } from "../component/planetCard";
+import { Context } from "../store/appContext";
 
 export class Home extends React.Component {
 	constructor() {
 		super();
-		this.state = {
-			characters: ["Luke Skywalker", "CP3PO", "Darth Vader"],
-			planets: ["Tatooine", "Planet Boom", "Another Weird Planet"]
-		};
+		this.state = {};
 	}
 
-	componentDidMount() {
-		// useEffect(()=>{
-		// }, []);
-		//syntax for useEffect the empty brackets makes the function run only once when the page renders
-		//use lesson on BreatheCode as a reference as well
-		//lifecycle event - makes the function run at a specific time
+	componentDidMount() {}
 
-		fetch("https://swapi.dev/api/planets/")
-			.then(function(response) {
-				if (!response.ok) {
-					throw Error(response.statusText);
-				}
-				// Read the response as json.
-				return response.json();
-			})
-			.then(function(responseAsJson) {
-				// Do stuff with the JSON
-				console.log("responseAsJson", responseAsJson);
-				this.setState({ planets: responseAsJson.results });
-			})
-			.catch(function(error) {
-				console.log("Looks like there was a problem: \n", error);
-			});
-
-		fetch("https://swapi.dev/api/people/")
-			.then(function(response) {
-				if (!response.ok) {
-					throw Error(response.statusText);
-				}
-				// Read the response as json.
-				return response.json();
-			})
-			.then(function(responseAsJson) {
-				// Do stuff with the JSON
-				console.log("responseAsJson", responseAsJson);
-				this.setState({ characters: responseAsJson.results });
-				//.results specifies the location of our array inside of the fetch object in our API - same in line 30
-			})
-			.catch(function(error) {
-				console.log("Looks like there was a problem: \n", error);
-			});
-	}
 	render() {
 		return (
 			<div>
-				{/* {this.characters.map((item, index) => {
-					return <CharacterCard key={index} character={item} index={index} />;
-				})}
-				{this.planets.map((item, index) => {
-					return <PlanetCard key={index} planet={item} index={index} />;
-				})} */}
+				<Context.Consumer>
+					{({ actions, store }) => {
+						return (
+							<>
+								{store.characters.map((item, index) => {
+									return <CharacterCard key={index} character={item.name} index={index} />;
+								})}
+								{store.planets.map((item, index) => {
+									return <PlanetCard key={index} planet={item.name} index={index} />;
+								})}
+							</>
+						);
+					}}
+				</Context.Consumer>
 			</div>
 		);
 	}

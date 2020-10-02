@@ -12,9 +12,9 @@ export const PlanetCard = props => {
 					Some quick example text to build on the card title and make up the bulk of the cards content.
 				</p>
 				<Link to="/details">
-					<a href="#" className="btn btn-primary">
+					<button href="#" className="btn btn-primary">
 						Details
-					</a>
+					</button>
 				</Link>
 			</div>
 		</div>

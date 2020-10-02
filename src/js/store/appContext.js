@@ -22,15 +22,40 @@ const injectContext = PassedComponent => {
 		);
 
 		useEffect(() => {
-			/**
-			 * EDIT THIS!
-			 * This function is the equivalent to "window.onLoad", it only runs once on the entire application lifetime
-			 * you should do your ajax requests or fetch api requests here. Do not use setState() to save data in the
-			 * store, instead use actions, like this:
-			 *
-			 * state.actions.loadSomeData(); <---- calling this function from the flux.js actions
-			 *
-			 **/
+			fetch("https://swapi.dev/api/people/")
+				.then(function(response) {
+					if (!response.ok) {
+						throw Error(response.statusText);
+					}
+					// Read the response as json.
+					return response.json();
+				})
+				.then(function(responseAsJson) {
+					let { store, actions } = state;
+					// Do stuff with the JSON
+					console.log("responseAsJson.results", responseAsJson.results);
+					setState({ store: { ...store, characters: responseAsJson.results }, actions });
+					//.results specifies the location of our array inside of the fetch object in our API - same in line 30
+				})
+				.catch(function(error) {
+					console.log("Looks like there was a problem: \n", error);
+				});
+
+			fetch("https://swapi.dev/api/planets/")
+				.then(function(response) {
+					if (!response.ok) {
+						throw Error(response.statusText);
+					}
+					return response.json();
+				})
+				.then(function(responseAsJson) {
+					let { store, actions } = state;
+					console.log("responseAsJson", responseAsJson);
+					setState({ store: { ...planets, planets: responseAsJson.results }, actions });
+				})
+				.catch(function(error) {
+					console.log("Looks like there was a problem: \n", error);
+				});
 		}, []);
 
 		// The initial value for the context is not null anymore, but the current state of this component,
